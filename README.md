@@ -1,6 +1,6 @@
 # Module 14 Challenge
 
-**TODO:** Deploy the new repository to GitHub Pages.
+**See it on GitHub Pages:** [https://tsbarr.github.io/belly-button-challenge/](https://tsbarr.github.io/belly-button-challenge/)
 
 ## Background
 
