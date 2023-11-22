@@ -48,6 +48,7 @@ function initOrUpdate(selectedId, initial) {
  *                            If false: it will only update the plots
  */
 function handleData(sampleId, dataSet, initial=true) {
+  console.log(dataSet);
   // Access data ids
   const ids = dataSet.names;
   // Loop through ids to find selected sample
@@ -65,9 +66,11 @@ function handleData(sampleId, dataSet, initial=true) {
         // Draw initial plots
         initBar(sampleId, top10);
         initBubble(sampleData);
+        initGauge(sampleMetadata.wfreq);
       } else { // If not initial, just update plots
         updateBar(sampleId, top10);
         updateBubble(sampleData);
+        updateGauge(sampleMetadata.wfreq)
       }
       // Finally, display metadata
       displayMetadata(sampleMetadata);
@@ -112,7 +115,7 @@ function displayMetadata(sampleMetadata) {
   metadataPanel.html(metadataHtml);
 }
 
-
+// ---
 function getTop10(sampleObject, reversed=true) {
   // Create an array that contains 3 arrays: 
   // 1 array for each: otu_ids, sample_values and otu_labels
@@ -140,7 +143,7 @@ function getTop10(sampleObject, reversed=true) {
   return top10Object;
 }
 
-
+// ---
 function initBar(sampleId, top10) {
   let data = [{
     y: top10.otu_ids, 
@@ -188,7 +191,7 @@ function initBubble(sampleData) {
     }
   }];
   let layout = {
-    title: `OTUs sampled from Test Subject ${sampleData.id}`
+    title: `All OTUs sampled from Test Subject ${sampleData.id}`
   };
   let config = {
     responsive: true
@@ -209,8 +212,54 @@ function updateBubble(sampleData) {
     }
   };
   let layout_update = {
-    title: `OTUs sampled from Test Subject ${sampleData.id}`
+    title: `All OTUs sampled from Test Subject ${sampleData.id}`
   };
   // Update both data and layout
   Plotly.update('bubble', data_update, layout_update);
+}
+
+// ---
+function initGauge(wfreq) {
+  console.log(wfreq);
+  let data = [
+    {
+      domain: { x: [0, 1], y: [0, 1] },
+      value: wfreq,
+      title: { text: "Belly Button Washing Frequency" },
+      type: "indicator",
+      mode: "gauge",
+      gauge: {
+        axis: { range: [0, 9] },
+        steps: [
+          { range: [0, 1], color: "lightgray" },
+          { range: [1, 2], color: "gray" },
+          { range: [2, 3], color: "lightgray" },
+          { range: [3, 4], color: "gray" },
+          { range: [4, 5], color: "lightgray" },
+          { range: [5, 6], color: "gray" },
+          { range: [6, 7], color: "lightgray" },
+          { range: [7, 8], color: "gray" },
+          { range: [8, 9], color: "lightgray" }
+        ]
+      }
+    }
+  ];
+  let layout = {
+    // title: `OTUs sampled from Test Subject ${sampleData.id}`
+  };
+  let config = {
+    responsive: true
+  };
+  Plotly.newPlot('gauge', data, layout, config);
+}
+
+// This function is called when a dropdown menu item is selected
+function updateGauge(wfreq) {
+  console.log(wfreq);
+  // Set data update
+  let data_update = {
+    value: [wfreq]
+  };
+  // Update data trace
+  Plotly.restyle('gauge', data_update);
 }
