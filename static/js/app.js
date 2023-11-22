@@ -48,7 +48,6 @@ function initOrUpdate(selectedId, initial) {
  *                            If false: it will only update the plots
  */
 function handleData(sampleId, dataSet, initial=true) {
-  console.log(dataSet);
   // Access data ids
   const ids = dataSet.names;
   // Loop through ids to find selected sample
@@ -108,8 +107,14 @@ function displayMetadata(sampleMetadata) {
   let metadataHtml = '';
   // loop through the keys of sampleMetadata
   for (const key in sampleMetadata) {
+    let stars = '';
+    if (key === 'bbtype') {
+      stars = '**';
+    } else if (key === 'wfreq') {
+      stars = '***';
+    }
     // Append to html -> key: value
-    metadataHtml += `<p><strong>${key}:</strong> ${sampleMetadata[key]}</p>`;
+    metadataHtml += `<p><strong>${key}:</strong> ${sampleMetadata[key]}${stars}</p>`;
   }
   // Display html in metadata panel
   metadataPanel.html(metadataHtml);
@@ -148,13 +153,16 @@ function initBar(sampleId, top10) {
   let data = [{
     y: top10.otu_ids, 
     x: top10.sample_values,
-    text: top10.otu_labels,
+    text: top10.otu_labels.map(x => x.replaceAll(';','<br>')),
     hoverinfo: 'text',
     type: 'bar',
-    orientation: 'h'
+    orientation: 'h',
+    marker: {
+      color: '#6e5ba4'
+    }
   }];
   let layout = {
-    title : `Top 10 OTUs sampled<br>from Test Subject ${sampleId}`
+    title: `Top 10 OTUs* sampled<br>from Test Subject ${sampleId}`
   };
   let config = {
     responsive: true
@@ -168,10 +176,10 @@ function updateBar(sampleId, top10) {
   let data_update = {
     y: [top10.otu_ids],
     x: [top10.sample_values],
-    text: [top10.otu_labels]
+    text: [top10.otu_labels.map(x => x.replaceAll(';', '<br>'))]
   };
   let layout_update = {
-    title: `Top 10 OTUs sampled<br>from Test Subject ${sampleId}`
+    title: `Top 10 OTUs* sampled<br>from Test Subject ${sampleId}`
   };
   // Update both data and layout
   Plotly.update('bar', data_update, layout_update);
@@ -182,7 +190,7 @@ function initBubble(sampleData) {
   let data = [{
     x: sampleData.otu_ids,
     y: sampleData.sample_values,
-    text: sampleData.otu_labels,
+    text: sampleData.otu_labels.map(x => x.replaceAll(';', '<br>')),
     hoverinfo: 'text',
     mode: 'markers',
     marker: {
@@ -191,7 +199,7 @@ function initBubble(sampleData) {
     }
   }];
   let layout = {
-    title: `All OTUs sampled from Test Subject ${sampleData.id}`
+    title: `All OTUs* sampled from Test Subject ${sampleData.id}`
   };
   let config = {
     responsive: true
@@ -205,14 +213,14 @@ function updateBubble(sampleData) {
   let data_update = {
     x: [sampleData.otu_ids],
     y: [sampleData.sample_values],
-    text: [sampleData.otu_labels],
+    text: [sampleData.otu_labels.map(x => x.replaceAll(';', '<br>'))],
     marker: {
       color: sampleData.otu_ids,
       size: sampleData.sample_values
     }
   };
   let layout_update = {
-    title: `All OTUs sampled from Test Subject ${sampleData.id}`
+    title: `All OTUs* sampled from Test Subject ${sampleData.id}`
   };
   // Update both data and layout
   Plotly.update('bubble', data_update, layout_update);
@@ -220,32 +228,40 @@ function updateBubble(sampleData) {
 
 // ---
 function initGauge(wfreq) {
-  console.log(wfreq);
   let data = [
     {
-      domain: { x: [0, 1], y: [0, 1] },
       value: wfreq,
-      title: { text: "Belly Button Washing Frequency" },
+      title: { text: 
+        '<b>Belly Button Washing Frequency</b>'
+        + '<br>Scrubs per Week'
+      },
       type: "indicator",
-      mode: "gauge",
+      mode: "gauge+number",
       gauge: {
-        axis: { range: [0, 9] },
+        axis: { 
+          range: [0, 9],
+          dtick: 1
+        },
+        bar: {
+          color: '#65733f'
+        },
         steps: [
-          { range: [0, 1], color: "lightgray" },
-          { range: [1, 2], color: "gray" },
-          { range: [2, 3], color: "lightgray" },
-          { range: [3, 4], color: "gray" },
-          { range: [4, 5], color: "lightgray" },
-          { range: [5, 6], color: "gray" },
-          { range: [6, 7], color: "lightgray" },
-          { range: [7, 8], color: "gray" },
-          { range: [8, 9], color: "lightgray" }
+          { range: [0, 1], color: '#d3dbbd' },
+          { range: [1, 2], color: '#d3dbbd' },
+          { range: [2, 3], color: '#d3dbbd' },
+          { range: [3, 4], color: '#d3dbbd' },
+          { range: [4, 5], color: '#d3dbbd' },
+          { range: [5, 6], color: '#d3dbbd' },
+          { range: [6, 7], color: '#d3dbbd' },
+          { range: [7, 8], color: '#d3dbbd' },
+          { range: [8, 9], color: '#d3dbbd' }
         ]
       }
     }
   ];
   let layout = {
     // title: `OTUs sampled from Test Subject ${sampleData.id}`
+    // margin: { t: 0, b: 0 }
   };
   let config = {
     responsive: true
@@ -255,7 +271,6 @@ function initGauge(wfreq) {
 
 // This function is called when a dropdown menu item is selected
 function updateGauge(wfreq) {
-  console.log(wfreq);
   // Set data update
   let data_update = {
     value: [wfreq]
