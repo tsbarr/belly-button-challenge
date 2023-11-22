@@ -21,10 +21,11 @@ dropdown.on("change",
 );
 
 /*
-* -----------------
-* --- Functions ---
-* -----------------
+* ----------------------------------------------------------------
+* --- Functions --------------------------------------------------
+* ----------------------------------------------------------------
 */
+
 /**
  * Function that will display metadata and plots for selected id
  * @param {string} selectedId - The id of sample to display
@@ -56,15 +57,17 @@ function handleData(sampleId, dataSet, initial=true) {
     if (ids[i] == sampleId) {
       const sampleMetadata = dataSet.metadata[i];
       const sampleData = dataSet.samples[i];
-      
+      const top10 = getTop10(sampleData);
       // if initial is true
       if (initial) {
         // Add options to dropdown
-        displayOptions(ids)
+        displayOptions(ids);
         // Draw initial plots
-        initPlots(sampleId, sampleData)
+        initBar(sampleId, top10);
+        initBubble(sampleData);
       } else { // If not initial, just update plots
-        updatePlots(sampleId, sampleData)
+        updateBar(sampleId, top10);
+        updateBubble(sampleData);
       }
       // Finally, display metadata
       displayMetadata(sampleMetadata);
@@ -110,41 +113,104 @@ function displayMetadata(sampleMetadata) {
 }
 
 
-function getTop10(sampleObject) {
+function getTop10(sampleObject, reversed=true) {
+  // Create an array that contains 3 arrays: 
+  // 1 array for each: otu_ids, sample_values and otu_labels
+  const idValueLabel = Object.values(sampleObject).slice(1);
+  // Transpose to create an array of arrays, one per otu
+  // Based on: https://stackoverflow.com/a/17428705
+  const otus = idValueLabel[0].map(
+    (_, colIndex) => idValueLabel.map(row => row[colIndex])
+  );
+  // Sort desc otus based on sample_values (middle value of each otu array)
+  otus.sort((a, b) => b[1] - a[1]);
+  // Get top 10
+  const top10 = otus.slice(0, 10);
+  // If reversed=true, use reversed top10
+  if (reversed) {
+    top10.reverse();
+  }
 
+  const top10Object = {
+    otu_ids: top10.map(x => `OTU ${x[0]}`),
+    sample_values: top10.map(x => x[1]),
+    otu_labels: top10.map(x => x[2])
+  };
+
+  return top10Object;
 }
 
 
-function initPlots(idString, sample) {
-  const top10 = getTop10(sample);
-
-
-  let trace1 = {
-    y: [], 
-    x: [],
+function initBar(sampleId, top10) {
+  let data = [{
+    y: top10.otu_ids, 
+    x: top10.sample_values,
+    text: top10.otu_labels,
+    hoverinfo: 'text',
     type: 'bar',
     orientation: 'h'
-  };
-  let data = [trace1];
+  }];
   let layout = {
-    title : 'title'
+    title : `Top 10 OTUs sampled<br>from Test Subject ${sampleId}`
   };
   let config = {
     responsive: true
   };
-  Plotly.newPlot("bar", data, layout, config);
-
+  Plotly.newPlot('bar', data, layout, config);
 }
 
 // This function is called when a dropdown menu item is selected
-function updatePlots(idString, samplesObj) {
-  // // Set values array
-  // let data_update = {
-  //   values: [Object.values(dataSet[country])]
-  // };
-  // let layout_update = {
-  //   'title': `${country}'s 2017 Government Expenditure`
-  // };
-  // // Update both data and layout at the same time
-  // Plotly.update('pie', data_update, layout_update);
+function updateBar(sampleId, top10) {
+  // Set data update
+  let data_update = {
+    y: [top10.otu_ids],
+    x: [top10.sample_values],
+    text: [top10.otu_labels]
+  };
+  let layout_update = {
+    title: `Top 10 OTUs sampled<br>from Test Subject ${sampleId}`
+  };
+  // Update both data and layout
+  Plotly.update('bar', data_update, layout_update);
+}
+
+// ---
+function initBubble(sampleData) {
+  let data = [{
+    x: sampleData.otu_ids,
+    y: sampleData.sample_values,
+    text: sampleData.otu_labels,
+    hoverinfo: 'text',
+    mode: 'markers',
+    marker: {
+      color: sampleData.otu_ids,
+      size: sampleData.sample_values
+    }
+  }];
+  let layout = {
+    title: `OTUs sampled from Test Subject ${sampleData.id}`
+  };
+  let config = {
+    responsive: true
+  };
+  Plotly.newPlot('bubble', data, layout, config);
+}
+
+// This function is called when a dropdown menu item is selected
+function updateBubble(sampleData) {
+  // Set data update
+  let data_update = {
+    x: [sampleData.otu_ids],
+    y: [sampleData.sample_values],
+    text: [sampleData.otu_labels],
+    marker: {
+      color: sampleData.otu_ids,
+      size: sampleData.sample_values
+    }
+  };
+  let layout_update = {
+    title: `OTUs sampled from Test Subject ${sampleData.id}`
+  };
+  // Update both data and layout
+  Plotly.update('bubble', data_update, layout_update);
 }
