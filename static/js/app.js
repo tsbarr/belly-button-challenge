@@ -76,24 +76,24 @@ function handleData(sampleId, dataSet, initial=true) {
 
 /**
  * Function to add the ids to the dropdown menu, called by initOrUpdate when initial=true.
- * @param {string[]} idObject - An array of strings that represent the sample ids,
+ * @param {string[]} idsObject - An array of strings that represent the sample ids,
  * a dropdown option will be created for each of them.
  */
-function displayOptions(idObject) {
-  // add options to selectElement
-  let options = '';
+function displayOptions(idsObject) {
+  // Initialize optionsHtml to add to dropdown
+  let optionsHtml = '';
   // how to use for...of loops: https://www.w3schools.com/js/js_loop_forof.asp
-  for (const id of idObject) {
+  for (const id of idsObject) {
     // Append to options
-    options += `<option value = "${id}">${id}</option>`;
+    optionsHtml += `<option value = "${id}">${id}</option>`;
   }
-  dropdown.html(options);
+  dropdown.html(optionsHtml);
 }
 
 
 /**
  * Function that takes a sample's metadata object and displays it in the html element with id=sample-metadata
- * @param {Object} sampleMetadata - An object containing a sample's metadata
+ * @param {Object} sampleMetadata - An object containing a sample's metadata as key:value pairs
  */
 function displayMetadata(sampleMetadata) {
   // Find html element to display metadata
@@ -132,7 +132,7 @@ function initPlots(idString, sample) {
   let config = {
     responsive: true
   };
-  Plotly.newPlot("plotArea", data, layout, config);
+  Plotly.newPlot("bar", data, layout, config);
 
 }
 
