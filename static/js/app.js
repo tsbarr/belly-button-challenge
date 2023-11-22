@@ -6,20 +6,30 @@ const url =
 // Run initial function
 initOrUpdate('940', initial=true);
 
+// Declare and define variable for dropdown
+const dropdown = d3.select("#selDataset");
+
 // Listen for change in dropdown option
-d3.select("#selDataset").on("change", 
+dropdown.on("change", 
   // when dropdrown changes
   () => {
     // Get value of selected id
-    let newId = d3.select("#selDataset").property("value");
+    let newId = dropdown.property("value");
     // Update page
     initOrUpdate(newId, initial=false);
   }
 );
 
-// --- Functions ---
-// Function that will display metadata and plots for selected id
-// If initial=true, it also sets the dropdown options
+/*
+* -----------------
+* --- Functions ---
+* -----------------
+*/
+/**
+ * Function that will display metadata and plots for selected id
+ * @param {string} selectedId - The id of sample to display
+ * @param {boolean} initial - is this the call that initiates the site? to pass to handleData()
+ */
 function initOrUpdate(selectedId, initial) {
   d3.json(url).then(
     // if promise is fulfilled:
@@ -28,7 +38,15 @@ function initOrUpdate(selectedId, initial) {
     () => { console.log('data failed to load') });
 }
 
-function handleData(sampleId, dataSet, initial=false) {
+/**
+ * Function for use within a .then() call, handles the data returned from a d3 promise
+ * @param {string} sampleId - The id of sample to display
+ * @param {Object} dataSet - Data Object returned from the d3.json() promise, with elements: names, metadata and samples
+ * @param {boolean} initial - Is this the call that initiates the site? 
+ *                            If true (default): it sets the dropdown options and draws the plots
+ *                            If false: it will only update the plots
+ */
+function handleData(sampleId, dataSet, initial=true) {
   // Access data ids
   const ids = dataSet.names;
   // Loop through ids to find selected sample
@@ -38,21 +56,29 @@ function handleData(sampleId, dataSet, initial=false) {
     if (ids[i] == sampleId) {
       const sampleMetadata = dataSet.metadata[i];
       const sampleData = dataSet.samples[i];
+      
       // if initial is true
       if (initial) {
         // Add options to dropdown
         displayOptions(ids)
         // Draw initial plots
         initPlots(sampleId, sampleData)
-      } else { // Otherwise, just update plots
+      } else { // If not initial, just update plots
         updatePlots(sampleId, sampleData)
       }
       // Finally, display metadata
-      displayMetadata(sampleId, sampleMetadata);
+      displayMetadata(sampleMetadata);
+      // We have found the sample's data, so break out of the loop
+      break;
     }
   }
 }
 
+/**
+ * Function to add the ids to the dropdown menu, called by initOrUpdate when initial=true.
+ * @param {string[]} idObject - An array of strings that represent the sample ids,
+ * a dropdown option will be created for each of them.
+ */
 function displayOptions(idObject) {
   // add options to selectElement
   let options = '';
@@ -61,22 +87,25 @@ function displayOptions(idObject) {
     // Append to options
     options += `<option value = "${id}">${id}</option>`;
   }
-  d3.select('#selDataset').html(options);
+  dropdown.html(options);
 }
 
-function displayMetadata(idString, metadata) {
+
+/**
+ * Function that takes a sample's metadata object and displays it in the html element with id=sample-metadata
+ * @param {Object} sampleMetadata - An object containing a sample's metadata
+ */
+function displayMetadata(sampleMetadata) {
+  // Find html element to display metadata
   const metadataPanel = d3.select('#sample-metadata');
+  // Initialize html
   let metadataHtml = '';
-  console.log('Displaying metadata for id: ' + idString);
-  const theKeys = Object.keys(metadata)
-  const theValues = Object.values(metadata)
-
-  for (let j = 0; j < theKeys.length; j++) {
-    let theIndex = theKeys[j];
-    let theValue = theValues[j];
-    metadataHtml += `<p><strong>${theIndex}:</strong> ${theValue}</p>`;
+  // loop through the keys of sampleMetadata
+  for (const key in sampleMetadata) {
+    // Append to html -> key: value
+    metadataHtml += `<p><strong>${key}:</strong> ${sampleMetadata[key]}</p>`;
   }
-
+  // Display html in metadata panel
   metadataPanel.html(metadataHtml);
 }
 
