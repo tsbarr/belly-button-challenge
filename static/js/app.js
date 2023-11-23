@@ -109,9 +109,9 @@ function displayMetadata(sampleMetadata) {
   for (const key in sampleMetadata) {
     let stars = '';
     if (key === 'bbtype') {
-      stars = '**';
+      stars = '<a href="#" title="belly button type (innie or outie)" class="silent-link">**</a>';
     } else if (key === 'wfreq') {
-      stars = '***';
+      stars = '<a href="#" title="wash frequency (scrubs per week)" class="silent-link">***</a>';
     }
     // Append to html -> key: value
     metadataHtml += `<p><strong>${key}:</strong> ${sampleMetadata[key]}${stars}</p>`;
