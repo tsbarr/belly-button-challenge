@@ -11,12 +11,12 @@
     a.silent-link {
       text-decoration: none;
       color: inherit;
-      cursor: text;
+      cursor: help;
     }
     a.silent-link:hover {
       text-decoration: none;
       color: inherit;
-      cursor: text;
+      cursor: help;
     }
     .plot-title {
       text-align: center;
@@ -46,19 +46,29 @@
           </div>
           <div id="sample-metadata" class="panel-body"></div>
         </div>
+        <div><small><strong>Note:</strong> Some subjects might have less than 10 OTUs</small></div>
       </div>
       <div class="col-md-5">
-        <div class="plot-title" id="bar-title"><h4></h4></div>
+        <div class="plot-title" id="bar-title">
+          <h4>Top 10 <a href="#" title="Operational Taxonomic Units" class="silent-link">OTUs*</a> sampled from Test Subject <span class="sampleID"></span></h4>
+        </div>
         <div id="bar"></div>
       </div>
       <div class="col-md-5">
-        <div class="plot-title" id="gauge-title"><h4></h4></div>
+        <div class="plot-title" id="gauge-title">
+          <h4>Test Subject <span class="sampleID"></span>'s Belly Button Washing Frequency</h4>
+          <h5>Scrubs per Week</h5>
+        </div>
         <div id="gauge"></div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="plot-title" id="bubble-title"><h4></h4></div>
+        <div class="plot-title" id="bubble-title">
+          <h4>All <a href="#"
+          title="Operational Taxonomic Units"
+          class="silent-link">OTUs*</a> sampled from Test Subject <span class="sampleID"></span></h4>
+        </div>
         <div id="bubble"></div>
       </div>
     </div>

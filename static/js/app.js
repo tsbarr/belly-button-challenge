@@ -8,10 +8,8 @@ initOrUpdate('940', initial=true);
 
 // Declare and define variable for dropdown
 const dropdown = d3.select("#selDataset");
-// Declare and define where plot titles go
-const barTitle = d3.select("#bar-title").select('h4');
-const bubbleTitle = d3.select("#bubble-title").select('h4');
-const gaugeTitle = d3.select("#gauge-title");
+// Declare and define all spots where we should add the id (for plt titles)
+const labelId = d3.selectAll('.sampleID');
 
 // Listen for change in dropdown option
 dropdown.on("change", 
@@ -52,6 +50,7 @@ function initOrUpdate(selectedId, initial) {
  *                            If false: it will only update the plots
  */
 function handleData(sampleId, dataSet, initial=true) {
+  labelId.text(sampleId);
   // Access data ids
   const ids = dataSet.names;
   // Loop through ids to find selected sample
@@ -67,13 +66,13 @@ function handleData(sampleId, dataSet, initial=true) {
         // Add options to dropdown
         displayOptions(ids);
         // Draw initial plots
-        initBar(sampleId, top10);
+        initBar(top10);
         initBubble(sampleData);
-        initGauge(sampleId, sampleMetadata.wfreq);
+        initGauge(sampleMetadata.wfreq);
       } else { // If not initial, just update plots
-        updateBar(sampleId, top10);
+        updateBar(top10);
         updateBubble(sampleData);
-        updateGauge(sampleId, sampleMetadata.wfreq)
+        updateGauge(sampleMetadata.wfreq)
       }
       // Finally, display metadata
       displayMetadata(sampleMetadata);
@@ -155,7 +154,7 @@ function getTop10(sampleObject, reversed=true) {
 }
 
 // ---
-function initBar(sampleId, top10) {
+function initBar(top10) {
   let data = [{
     y: top10.otu_ids, 
     x: top10.sample_values,
@@ -170,11 +169,10 @@ function initBar(sampleId, top10) {
   let layout = { margin: { t: 0 } };
   let config = { responsive: true };
   Plotly.newPlot('bar', data, layout, config);
-  barTitle.text(`Top 10 OTUs* sampled from Test Subject ${sampleId}`)
 }
 
 // This function is called when a dropdown menu item is selected
-function updateBar(sampleId, top10) {
+function updateBar(top10) {
   // Set data update
   let data_update = {
     y: [top10.otu_ids],
@@ -183,7 +181,6 @@ function updateBar(sampleId, top10) {
   };
   // Update both data
   Plotly.restyle('bar', data_update);
-  barTitle.text(`Top 10 OTUs* sampled from Test Subject ${sampleId}`)
 }
 
 // ---
@@ -203,7 +200,6 @@ function initBubble(sampleData) {
   let layout = { margin: { t: 0 } };
   let config = { responsive: true };
   Plotly.newPlot('bubble', data, layout, config);
-  bubbleTitle.text(`All OTUs* sampled from Test Subject ${sampleData.id}`)
 }
 
 // This function is called when a dropdown menu item is selected
@@ -220,11 +216,10 @@ function updateBubble(sampleData) {
   };
   // Update both data and layout
   Plotly.restyle('bubble', data_update);
-  bubbleTitle.text(`All OTUs* sampled from Test Subject ${sampleData.id}`)
 }
 
 // ---
-function initGauge(sampleId, wfreq) {
+function initGauge(wfreq) {
   let data = [
     {
       domain: { y: [0] },
@@ -246,18 +241,14 @@ function initGauge(sampleId, wfreq) {
   let layout = { margin: { t: 0 } };
   let config = { responsive: true };
   Plotly.newPlot('gauge', data, layout, config);
-  gaugeTitle.html(`<h4>Test Subject ${sampleId}'s Belly Button Washing Frequency</h4>`
-    + '<h5>Scrubs per Week</h5>')
 }
 
 // This function is called when a dropdown menu item is selected
-function updateGauge(sampleId, wfreq) {
+function updateGauge(wfreq) {
   // Set data update
   let data_update = {
     value: [wfreq]
   };
   // Update data trace
   Plotly.restyle('gauge', data_update);
-  gaugeTitle.html(`<h4>Test Subject ${sampleId}'s Belly Button Washing Frequency</h4>`
-    + '<h5>Scrubs per Week</h5>')
 }
