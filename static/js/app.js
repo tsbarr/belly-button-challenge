@@ -222,7 +222,7 @@ function updateBubble(sampleData) {
 function initGauge(wfreq) {
   let data = [
     {
-      domain: { y: [0] },
+      domain: { x: [0, 1], y: [0.4, 0.9] },
       value: wfreq,
       type: "indicator",
       mode: "gauge+number",
@@ -238,7 +238,9 @@ function initGauge(wfreq) {
       }
     }
   ];
-  let layout = { margin: { t: 0 } };
+  let layout = {
+    margin: { t: 0 }
+  };
   let config = { responsive: true };
   Plotly.newPlot('gauge', data, layout, config);
 }

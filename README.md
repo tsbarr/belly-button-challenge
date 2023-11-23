@@ -111,6 +111,7 @@ The following task is advanced and therefore optional.
 ---
 
 ## References
+Data source: 
 Hulcr, J. et al. (2012) *A Jungle in There: Bacteria in Belly Buttons are Highly Diverse, but Predictable.* Retrieved from: [http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/](http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/)
 
 Challenge instructions and starter files, as well as some code sections that were adapted from the UofT SCS EdX Data Bootcamp class activities:
@@ -118,3 +119,5 @@ Challenge instructions and starter files, as well as some code sections that wer
 © 2022 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
 
 Some other code sections were adapted from other sources, specific explanations are found within the code comments.
+
+Favicon generated using [favicon.io](favicon.io). The [graphics](https://github.com/twitter/twemoji/blob/master/assets/svg/1f52c.svg) are from the open source project [Twemoji](https://twemoji.twitter.com/), copyright 2020 Twitter, Inc and other contributors, and they are licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
