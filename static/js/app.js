@@ -8,6 +8,10 @@ initOrUpdate('940', initial=true);
 
 // Declare and define variable for dropdown
 const dropdown = d3.select("#selDataset");
+// Declare and define where plot titles go
+const barTitle = d3.select("#bar-title").select('h4');
+const bubbleTitle = d3.select("#bubble-title").select('h4');
+const gaugeTitle = d3.select("#gauge-title");
 
 // Listen for change in dropdown option
 dropdown.on("change", 
@@ -65,11 +69,11 @@ function handleData(sampleId, dataSet, initial=true) {
         // Draw initial plots
         initBar(sampleId, top10);
         initBubble(sampleData);
-        initGauge(sampleMetadata.wfreq);
+        initGauge(sampleId, sampleMetadata.wfreq);
       } else { // If not initial, just update plots
         updateBar(sampleId, top10);
         updateBubble(sampleData);
-        updateGauge(sampleMetadata.wfreq)
+        updateGauge(sampleId, sampleMetadata.wfreq)
       }
       // Finally, display metadata
       displayMetadata(sampleMetadata);
@@ -107,14 +111,16 @@ function displayMetadata(sampleMetadata) {
   let metadataHtml = '';
   // loop through the keys of sampleMetadata
   for (const key in sampleMetadata) {
-    let stars = '';
+    let open = '', close = '';
     if (key === 'bbtype') {
-      stars = '<a href="#" title="belly button type (innie or outie)" class="silent-link">**</a>';
+      open = '<a href="#" title="belly button type (innie or outie)" class="silent-link">';
+      close = '**</a>';
     } else if (key === 'wfreq') {
-      stars = '<a href="#" title="wash frequency (scrubs per week)" class="silent-link">***</a>';
+      open = '<a href="#" title="wash frequency (scrubs per week)" class="silent-link">';
+      close = '***</a>';
     }
     // Append to html -> key: value
-    metadataHtml += `<p><strong>${key}:</strong> ${sampleMetadata[key]}${stars}</p>`;
+    metadataHtml += `<p>${open}<strong>${key}:</strong> ${sampleMetadata[key]}${close}</p>`;
   }
   // Display html in metadata panel
   metadataPanel.html(metadataHtml);
@@ -158,16 +164,13 @@ function initBar(sampleId, top10) {
     type: 'bar',
     orientation: 'h',
     marker: {
-      color: '#6e5ba4'
+      color: '#7d40bf'
     }
   }];
-  let layout = {
-    title: `Top 10 OTUs* sampled<br>from Test Subject ${sampleId}`
-  };
-  let config = {
-    responsive: true
-  };
+  let layout = { margin: { t: 0 } };
+  let config = { responsive: true };
   Plotly.newPlot('bar', data, layout, config);
+  barTitle.text(`Top 10 OTUs* sampled from Test Subject ${sampleId}`)
 }
 
 // This function is called when a dropdown menu item is selected
@@ -178,11 +181,9 @@ function updateBar(sampleId, top10) {
     x: [top10.sample_values],
     text: [top10.otu_labels.map(x => x.replaceAll(';', '<br>'))]
   };
-  let layout_update = {
-    title: `Top 10 OTUs* sampled<br>from Test Subject ${sampleId}`
-  };
-  // Update both data and layout
-  Plotly.update('bar', data_update, layout_update);
+  // Update both data
+  Plotly.restyle('bar', data_update);
+  barTitle.text(`Top 10 OTUs* sampled from Test Subject ${sampleId}`)
 }
 
 // ---
@@ -195,16 +196,14 @@ function initBubble(sampleData) {
     mode: 'markers',
     marker: {
       color: sampleData.otu_ids,
-      size: sampleData.sample_values
+      size: sampleData.sample_values,
+      colorscale: 'Bluered'
     }
   }];
-  let layout = {
-    title: `All OTUs* sampled from Test Subject ${sampleData.id}`
-  };
-  let config = {
-    responsive: true
-  };
+  let layout = { margin: { t: 0 } };
+  let config = { responsive: true };
   Plotly.newPlot('bubble', data, layout, config);
+  bubbleTitle.text(`All OTUs* sampled from Test Subject ${sampleData.id}`)
 }
 
 // This function is called when a dropdown menu item is selected
@@ -219,22 +218,17 @@ function updateBubble(sampleData) {
       size: sampleData.sample_values
     }
   };
-  let layout_update = {
-    title: `All OTUs* sampled from Test Subject ${sampleData.id}`
-  };
   // Update both data and layout
-  Plotly.update('bubble', data_update, layout_update);
+  Plotly.restyle('bubble', data_update);
+  bubbleTitle.text(`All OTUs* sampled from Test Subject ${sampleData.id}`)
 }
 
 // ---
-function initGauge(wfreq) {
+function initGauge(sampleId, wfreq) {
   let data = [
     {
+      domain: { y: [0] },
       value: wfreq,
-      title: { text: 
-        '<b>Belly Button Washing Frequency</b>'
-        + '<br>Scrubs per Week'
-      },
       type: "indicator",
       mode: "gauge+number",
       gauge: {
@@ -243,38 +237,27 @@ function initGauge(wfreq) {
           dtick: 1
         },
         bar: {
-          color: '#65733f'
+          color: '#7e2a54'
         },
-        steps: [
-          { range: [0, 1], color: '#d3dbbd' },
-          { range: [1, 2], color: '#d3dbbd' },
-          { range: [2, 3], color: '#d3dbbd' },
-          { range: [3, 4], color: '#d3dbbd' },
-          { range: [4, 5], color: '#d3dbbd' },
-          { range: [5, 6], color: '#d3dbbd' },
-          { range: [6, 7], color: '#d3dbbd' },
-          { range: [7, 8], color: '#d3dbbd' },
-          { range: [8, 9], color: '#d3dbbd' }
-        ]
+        bgcolor: '#d9bfcc'
       }
     }
   ];
-  let layout = {
-    // title: `OTUs sampled from Test Subject ${sampleData.id}`
-    // margin: { t: 0, b: 0 }
-  };
-  let config = {
-    responsive: true
-  };
+  let layout = { margin: { t: 0 } };
+  let config = { responsive: true };
   Plotly.newPlot('gauge', data, layout, config);
+  gaugeTitle.html(`<h4>Test Subject ${sampleId}'s Belly Button Washing Frequency</h4>`
+    + '<h5>Scrubs per Week</h5>')
 }
 
 // This function is called when a dropdown menu item is selected
-function updateGauge(wfreq) {
+function updateGauge(sampleId, wfreq) {
   // Set data update
   let data_update = {
     value: [wfreq]
   };
   // Update data trace
   Plotly.restyle('gauge', data_update);
+  gaugeTitle.html(`<h4>Test Subject ${sampleId}'s Belly Button Washing Frequency</h4>`
+    + '<h5>Scrubs per Week</h5>')
 }

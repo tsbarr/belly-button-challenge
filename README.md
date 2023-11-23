@@ -1,6 +1,6 @@
 # Module 14 Challenge
 
-**See it on GitHub Pages:** [https://tsbarr.github.io/belly-button-challenge/](https://tsbarr.github.io/belly-button-challenge/)
+**See result GitHub Pages:** [https://tsbarr.github.io/belly-button-challenge/](https://tsbarr.github.io/belly-button-challenge/)
 
 ## Background
 
