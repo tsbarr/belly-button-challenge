@@ -6,23 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Bellybutton Biodiversity</title>
-<link rel="apple-touch-icon" sizes="180x180" href="static/favicon_io/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="static/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="static/favicon_io/favicon-16x16.png">
-<link rel="manifest" href="static/favicon_io/site.webmanifest">  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="static/favicon_io/site.webmanifest">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <style>
     a.silent-link {
       text-decoration: none;
       color: inherit;
-      cursor: help;
     }
+
     a.silent-link:hover {
       text-decoration: none;
       color: inherit;
       cursor: help;
-    }
-    .plot-title {
-      text-align: center;
     }
   </style>
 </head>
@@ -33,7 +31,9 @@
     <div class="row">
       <div class="col-md-12 jumbotron text-center">
         <h1>Belly Button Biodiversity Dashboard</h1>
-        <p>Use the interactive charts below to explore the dataset <sup> <a href="#" title="Hulcr, J. et al. (2012) A Jungle in There: Bacteria in Belly Buttons are Highly Diverse, but Predictable." class="silent-link">[1]</a></sup></p>
+        <p>Use the interactive charts below to explore the dataset <sup> <a href="#"
+              title="Hulcr, J. et al. (2012) A Jungle in There: Bacteria in Belly Buttons are Highly Diverse, but Predictable."
+              class="silent-link">[1]</a></sup></p>
       </div>
     </div>
     <div class="row">
@@ -52,13 +52,14 @@
         <div><small><strong>Note:</strong> Some subjects might have less than 10 OTUs</small></div>
       </div>
       <div class="col-md-5">
-        <div class="plot-title" id="bar-title">
-          <h4>Top 10 <a href="#" title="Operational Taxonomic Units" class="silent-link">OTUs*</a> sampled from Test Subject <span class="sampleID"></span></h4>
+        <div class="plot-title text-center" id="bar-title">
+          <h4>Top 10 <a href="#" title="Operational Taxonomic Units" class="silent-link">OTUs*</a> sampled from Test
+            Subject <span class="sampleID"></span></h4>
         </div>
         <div id="bar"></div>
       </div>
       <div class="col-md-5">
-        <div class="plot-title" id="gauge-title">
+        <div class="plot-title text-center" id="gauge-title">
           <h4>Test Subject <span class="sampleID"></span>'s Belly Button Washing Frequency</h4>
           <h5>Scrubs per Week</h5>
         </div>
@@ -67,10 +68,9 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="plot-title" id="bubble-title">
-          <h4>All <a href="#"
-          title="Operational Taxonomic Units"
-          class="silent-link">OTUs*</a> sampled from Test Subject <span class="sampleID"></span></h4>
+        <div class="plot-title text-center" id="bubble-title">
+          <h4>All <a href="#" title="Operational Taxonomic Units" class="silent-link">OTUs*</a> sampled from Test
+            Subject <span class="sampleID"></span></h4>
         </div>
         <div id="bubble"></div>
       </div>
@@ -78,13 +78,14 @@
     <div class="row">
       <div class="col-md-12" style="padding: 15px;">
         <p>* OTUs = Operational Taxonomic Units<br>
-        ** bbtype = belly button type (innie or outie)<br>
-        *** wfreq = wash frequency (scrubs per week)</p>
-        <p><sup>[1]</sup> <b>Source:</b> Hulcr, J. et al. (2012) <i>A Jungle in There: Bacteria in Belly Buttons are Highly Diverse, but
-          Predictable.</i> Retrieved
-        from: <a href="http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/"
-          target="_blank">http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/</a></p>
-        </div>
+          ** bbtype = belly button type (innie or outie)<br>
+          *** wfreq = wash frequency (scrubs per week)</p>
+        <p><sup>[1]</sup> <b>Source:</b> Hulcr, J. et al. (2012) <i>A Jungle in There: Bacteria in Belly Buttons are
+            Highly Diverse, but
+            Predictable.</i> Retrieved
+          from: <a href="http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/"
+            target="_blank">http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/</a></p>
+      </div>
     </div>
   </div>
 
