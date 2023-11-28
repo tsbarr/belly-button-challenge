@@ -131,6 +131,9 @@ function displayMetadata(sampleMetadata) {
 /**
  * Function to calculate top 10 otus by value found in the selected sample
  * @param {Object} sampleObject - object containing the selected sample's otu data
+ * @param {number[]} sampleObject.otu_ids
+ * @param {number[]} sampleObject.sample_values
+ * @param {string[]} sampleObject.otu_labels
  * @param {boolean} reversed - whether to reverse the top10 output 
  *                            (default true for use in horizontal plotly bar charts)
  * @returns Object containing the top 10 otus found in the sample by values, 
