@@ -1,4 +1,4 @@
-# JS dashboard: Belly Button Biodiversity Dataset
+# Data dashboard: Belly Button Biodiversity
 
 
 ## Background
